@@ -140,7 +140,7 @@ func main() {
 		host    = flag.String("host", "0.0.0.0", "Host to listen on")
 		port    = flag.Int("port", 23234, "Port to listen on")
 		seed    = flag.Int64("seed", time.Now().UnixNano(), "Random seed")
-		refresh = flag.Int("refresh", 0, "Refresh AI pattern every N seconds")
+		refresh = flag.Int("refresh", 86400, "Refresh AI pattern daily (seconds)")
 	)
 	flag.Parse()
 

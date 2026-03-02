@@ -46,7 +46,8 @@ go build -o strudel
 ### With AI Generation
 ```bash
 export AI_GATEWAY_API_KEY="your-key"
-./strudel-wish --refresh 60
+# Daily refresh (default)
+./strudel-wish
 ```
 
 ### Docker
