@@ -1,7 +1,0 @@
-tunnel: your-tunnel-id
-credentials-file: /root/.cloudflared/credentials.json
-
-ingress:
-  - hostname: music.jelly.ninja
-    service: tcp://localhost:23234
-  - service: http_status:404

@@ -141,6 +141,7 @@ func main() {
 		port    = flag.Int("port", 23234, "Port to listen on")
 		seed    = flag.Int64("seed", time.Now().UnixNano(), "Random seed")
 		refresh = flag.Int("refresh", 86400, "Refresh AI pattern daily (seconds)")
+		keyPath = flag.String("key-path", "./strudel_wish", "SSH host key path")
 	)
 	flag.Parse()
 
@@ -150,7 +151,7 @@ func main() {
 
 	s, err := wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", *host, *port)),
-		wish.WithHostKeyPath("/tmp/strudel_wish"),
+		wish.WithHostKeyPath(*keyPath),
 		wish.WithPublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
 			return true
 		}),
@@ -182,6 +183,7 @@ func main() {
 						fmt.Fprint(s, pattern)
 					} else {
 						fmt.Fprint(s, pattern)
+						fmt.Fprint(s, "\n")
 					}
 				}
 			},
