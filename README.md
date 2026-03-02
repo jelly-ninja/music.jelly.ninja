@@ -10,52 +10,32 @@ ssh music.jelly.ninja | strudel
 
 That's it! Opens strudel.cc in your browser with a fresh pattern.
 
-**Port:** Default SSH (22)
+## Self-Host with Cloudflare Tunnel
 
-## Requirements
+Run locally and expose to the world:
 
-- SSH client
-- A browser
+```bash
+# 1. Install cloudflared
+brew install cloudflared  # macOS
+# or: curl -L https://github.com/cloudflare/cloudflared/releases/download/2024.1.5/cloudflared-darwin-arm64 -o /usr/local/bin/cloudflared
 
-No install needed.
+# 2. Create tunnel
+cloudflared tunnel create music-jelly-ninja
 
-## How It Works
+# 3. Configure DNS
+cloudflared tunnel route dns music-jelly-ninja music.jelly.ninja
 
+# 4. Run server + tunnel
+cd ssh && go build -o strudel-wish
+./strudel-wish --port 23234 &
+
+cloudflared tunnel run --config ../cloudflared.yml music-jelly-ninja
 ```
-ssh music.jelly.ninja → Returns Strudel pattern
-                    → strudel CLI opens browser with pattern
-                    → Listen in strudel.cc!
-```
 
-## Development
+## Deploy to VPS
 
-### SSH Server (Go)
 ```bash
 cd ssh
 go build -o strudel-wish
-./strudel-wish --port 23234
+./strudel-wish --port 22
 ```
-
-### CLI (Go)
-```bash
-cd cli-go
-go build -o strudel
-./strudel
-```
-
-### With AI Generation
-```bash
-export AI_GATEWAY_API_KEY="your-key"
-# Daily refresh (default)
-./strudel-wish
-```
-
-### Docker
-```bash
-docker build -t music-jelly-ninja ./ssh
-docker run -p 23234:23234 -e AI_GATEWAY_API_KEY=your-key music-jelly-ninja
-```
-
-## License
-
-AGPL-3.0
