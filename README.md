@@ -10,6 +10,8 @@ ssh music.jelly.ninja | strudel
 
 That's it! Opens strudel.cc in your browser with a fresh pattern.
 
+**Port:** Default SSH (22)
+
 ## Requirements
 
 - SSH client
