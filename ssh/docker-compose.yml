@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  strudel-wish:
+    build: 
+      context: ./ssh
+      dockerfile: Dockerfile
+    ports:
+      - "23234:23234"
+    restart: unless-stopped
+    volumes:
+      - strudel-ssh-keys:/app/.ssh
+
+volumes:
+  strudel-ssh-keys:
