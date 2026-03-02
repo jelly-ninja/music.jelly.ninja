@@ -45,14 +45,14 @@ go build -o strudel
 
 ### With AI Generation
 ```bash
-export OPENAI_API_KEY="your-key"
+export AI_GATEWAY_API_KEY="your-key"
 ./strudel-wish --refresh 60
 ```
 
 ### Docker
 ```bash
 docker build -t music-jelly-ninja ./ssh
-docker run -p 23234:23234 -e OPENAI_API_KEY=your-key music-jelly-ninja
+docker run -p 23234:23234 -e AI_GATEWAY_API_KEY=your-key music-jelly-ninja
 ```
 
 ## License

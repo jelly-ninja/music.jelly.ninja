@@ -22,6 +22,7 @@ import (
 
 var currentPattern string
 var lastRefresh time.Time
+var useAI bool
 
 var patterns = []string{
 	`s("bd*4")`,
@@ -54,16 +55,19 @@ func generatePattern(useAI bool, refresh int) string {
 }
 
 func getAIPattern() string {
-	apiKey := os.Getenv("OPENAI_API_KEY")
-	gatewayURL := os.Getenv("GATEWAY_URL")
+	apiKey := os.Getenv("AI_GATEWAY_API_KEY")
+	if apiKey == "" {
+		apiKey = os.Getenv("OPENAI_API_KEY")
+	}
 	
 	if apiKey == "" {
-		log.Warn("OPENAI_API_KEY not set, using random pattern")
+		log.Warn("AI_GATEWAY_API_KEY not set, using random pattern")
 		return patterns[rand.Intn(len(patterns))]
 	}
 
+	gatewayURL := os.Getenv("GATEWAY_URL")
 	if gatewayURL == "" {
-		gatewayURL = "https://gateway.v.ai.vercel.ai/v1/chat/completions"
+		gatewayURL = "https://ai-gateway.vercel.sh/v1/chat/completions"
 	}
 
 	type Message struct {
@@ -140,12 +144,13 @@ func main() {
 	)
 	flag.Parse()
 
-	useAI := os.Getenv("OPENAI_API_KEY") != ""
+	// Enable AI if either API key is set
+	useAI = os.Getenv("AI_GATEWAY_API_KEY") != "" || os.Getenv("OPENAI_API_KEY") != ""
 	rand.Seed(*seed)
 
 	s, err := wish.NewServer(
 		wish.WithAddress(fmt.Sprintf("%s:%d", *host, *port)),
-		wish.WithHostKeyPath(".ssh/strudel_wish"),
+		wish.WithHostKeyPath("/tmp/strudel_wish"),
 		wish.WithPublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
 			return true
 		}),
